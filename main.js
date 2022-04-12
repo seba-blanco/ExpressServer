@@ -1,10 +1,18 @@
 const express = require('express');
+const { get } = require('express/lib/response');
+const {Router} = express;
+
 const port= 8080;
+
 const app = express();
+const router = Router();
+
 const fs = require('fs');
 const path = require('path');
 
-
+app.use(express.json());
+app.use(express.urlencoded({extended:true}));
+app.use("/api/productos", router);
 
 class contenedor {
     constructor(fileName) {
@@ -64,18 +72,34 @@ class contenedor {
        
         this.writeFile(datos);
 
+        return object;
+
+
+    }
+
+    update = async (id, product) => {
+        let datos = await this.readFile().then (prods=> {return prods});
+        
+        let newData = datos.filter(x=> x.id != id);
+
+        product["id"] = id;
+
+        newData.push(product);
+       
+        this.writeFile(newData);
+
+        return product;
 
 
     }
 
     deleteById =async(id) => {
-        console.log("entre al get by id");
+        
         let datos = await this.readFile().then (prods=> {return prods});
         
         let newData = datos.filter(x=> x.id != id);
         
-        console.log("newData");
-        console.log(newData);
+      
         this.writeFile(newData);
 
     }
@@ -88,25 +112,8 @@ class contenedor {
     }
 }
 
-/*
-const archivo = new contenedor('./products.json');
-
- archivo.getAll().then(res => {console.log(res)});
-
-
- archivo.getById(2).then(res => {console.log(res)})
-
-
- const newProduct = {
-    "title":"Muy malo",
-    "price":200,
-    "thumbnails":"test"
- }
-
- archivo.save(newProduct)*/
-
  
- const archivo = new contenedor('./products.json');
+const archivo = new contenedor('./products.json');
 
 const server =app.listen(port, () => {
 
@@ -116,7 +123,7 @@ const server =app.listen(port, () => {
 server.on("error", error => console.log(`Error en servidor ${error}`));
 
 
-app.get('/productos',async  (req,res) =>{
+router.get('/',async  (req,res) =>{
     
     let prods =await archivo.getAll();
     
@@ -124,10 +131,41 @@ app.get('/productos',async  (req,res) =>{
 
 })
 
-
-app.get('/productoRandom',async (req,res) =>{
+//get product by id.
+router.get('/:id',async (req,res) =>{
     
-    const id = Math.floor(Math.random() * 4) + 1;
+    const id = req.params.id;
     let prods = await archivo.getById(id);
-    res.json(prods);
+    if (Object.entries(prods).length === 0) 
+        res.json({errorMsg:'el objeto esta vacio'})
+    else 
+        res.json(prods);
+})
+
+
+//add product to products.json
+router.post("/", async (req, res) => {
+    
+    let newProduct = await archivo.save(req.body);
+    console.log(newProduct);
+    res.json({newProduct: newProduct});
+})
+
+
+//modify by ID
+router.put("/:id", async (req, res) => {
+    const id = req.params.id;
+    let newProduct = await archivo.update(id, req.body);
+    console.log(newProduct);
+    res.json({newProduct: newProduct});
+})
+
+
+//Delete by ID
+router.delete("/:id", async (req, res) => {
+    
+    const id = req.params.id;
+    await(archivo.deleteById(id));
+   
+    res.json({deletedId: id});
 })
