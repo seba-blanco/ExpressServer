@@ -12,12 +12,6 @@
         "thumbnails": "test"
     },
     {
-        "id": 3,
-        "title": "Globo terraqueo",
-        "price": 345.67,
-        "thumbnails": "test"
-    },
-    {
         "title": "lapicera",
         "price": 200,
         "thumbnails": "test",
