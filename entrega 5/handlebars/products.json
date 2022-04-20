@@ -28,5 +28,11 @@
         "price": 200,
         "thumbnails": "test",
         "id": 6
+    },
+    {
+        "title": "handlebars",
+        "price": "4",
+        "thumbnails": "prueba",
+        "id": 7
     }
 ]

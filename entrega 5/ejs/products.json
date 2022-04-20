@@ -28,5 +28,11 @@
         "price": 200,
         "thumbnails": "test",
         "id": 6
+    },
+    {
+        "title": "ejs",
+        "price": "15",
+        "thumbnails": "test ejs",
+        "id": 7
     }
 ]

@@ -34,5 +34,11 @@
         "price": 200,
         "thumbnails": "test",
         "id": 7
+    },
+    {
+        "title": "pug",
+        "price": "10",
+        "thumbnails": "pug",
+        "id": 8
     }
 ]

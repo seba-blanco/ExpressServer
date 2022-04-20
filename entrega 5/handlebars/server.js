@@ -11,7 +11,7 @@ app.use(express.json());
 app.use(express.urlencoded({extended:true}));
 // app.use("/api/productos", router);
 
-app.set('view engine', 'pug');
+app.set('view engine', 'hbs');
 app.set('views', './views');
 app.use(express.static("public"));
 
@@ -54,10 +54,9 @@ app.get('/',async  (req,res) =>{
 
 //add product to products.json
 app.post("/", async (req, res) => {
-    console.log("entre al post");
-    console.log(req.body);
+   
     let newProduct = await archivo.save(req.body);
-     console.log(newProduct);
+    
      res.redirect('/productos');
      // res.json({newProduct: newProduct});
 })
