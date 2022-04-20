@@ -1,0 +1,24 @@
+
+<h2>Productos:</h2>
+
+{{#if listExists}}
+    {{#each productos}}
+        <div className='d-flex d-row'>
+                                        
+            <div>
+                <span className="title">Nombre: {{this.title}}</span>
+                
+                <p><b>Price: {{this.price}}$</b></p> 
+                
+            </div>
+                    
+        </div>   
+    {{/each}}
+{{/if}}
+
+<form  action="/" >
+    <input type="submit" value="create product">
+</form>
+
+
+    

@@ -1,0 +1,56 @@
+[
+    {
+        "id": 1,
+        "title": "Escuadra",
+        "price": 123.45,
+        "thumbnails": "test"
+    },
+    {
+        "id": 2,
+        "title": "calculadora",
+        "price": 234.56,
+        "thumbnails": "test"
+    },
+    {
+        "title": "lapicera",
+        "price": 200,
+        "thumbnails": "test",
+        "id": 4
+    },
+    {
+        "title": "boligoma",
+        "price": 200,
+        "thumbnails": "test",
+        "id": 5
+    },
+    {
+        "title": "papel glase",
+        "price": 200,
+        "thumbnails": "test",
+        "id": 6
+    },
+    {
+        "title": "estatua de Peron",
+        "price": 200,
+        "thumbnails": "test",
+        "id": 7
+    },
+    {
+        "title": "Muy malo",
+        "price": 200,
+        "thumbnails": "test",
+        "id": 8
+    },
+    {
+        "title": "seba",
+        "price": "2",
+        "thumbnails": "test",
+        "id": 9
+    },
+    {
+        "title": "pug",
+        "price": "4",
+        "thumbnails": "el pug",
+        "id": 10
+    }
+]
