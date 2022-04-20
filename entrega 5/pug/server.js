@@ -10,7 +10,7 @@ app.use(express.json());
 app.use(express.urlencoded({extended:true}));
 // app.use("/api/productos", router);
 
-app.set('view engine', 'hbs');
+app.set('view engine', 'pug');
 app.set('views', './views');
 app.use(express.static("public"));
 

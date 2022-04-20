@@ -4,18 +4,12 @@ const PORT = 8080;
 
 const Contenedor = require("./contenedorAsync");
 
-// const router = Router();
-
 app.use(express.json());
 app.use(express.urlencoded({extended:true}));
-// app.use("/api/productos", router);
 
-app.set('view engine', 'hbs');
-app.set('views', './views');
+app.set('view engine', 'ejs');
+// app.set('views', './views');
 app.use(express.static("public"));
-
-
-
  
 const archivo = new Contenedor('./products.json');
 
@@ -32,13 +26,13 @@ app.get('/productos',async  (req,res) =>{
     let prods =await archivo.getAll();
     
     console.log(prods);
-    res.render('productos.pug', { productos: prods, listExists: true });  
+    res.render('pages/viewProducts', { productos: prods, listExists: true });  
 
 })
 
 app.get('/',async  (req,res) =>{
     
-    res.render('main.pug', {});  
+    res.render('pages/index');  
 
 })
 

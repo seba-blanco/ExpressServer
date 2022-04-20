@@ -28,29 +28,5 @@
         "price": 200,
         "thumbnails": "test",
         "id": 6
-    },
-    {
-        "title": "estatua de Peron",
-        "price": 200,
-        "thumbnails": "test",
-        "id": 7
-    },
-    {
-        "title": "Muy malo",
-        "price": 200,
-        "thumbnails": "test",
-        "id": 8
-    },
-    {
-        "title": "seba",
-        "price": "2",
-        "thumbnails": "test",
-        "id": 9
-    },
-    {
-        "title": "pug",
-        "price": "4",
-        "thumbnails": "el pug",
-        "id": 10
     }
 ]
