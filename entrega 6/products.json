@@ -1,0 +1,38 @@
+[
+    {
+        "id": 1,
+        "title": "Escuadra",
+        "price": 123.45,
+        "thumbnails": "test"
+    },
+    {
+        "id": 2,
+        "title": "calculadora",
+        "price": 234.56,
+        "thumbnails": "test"
+    },
+    {
+        "title": "lapicera",
+        "price": 200,
+        "thumbnails": "test",
+        "id": 4
+    },
+    {
+        "title": "boligoma",
+        "price": 200,
+        "thumbnails": "test",
+        "id": 5
+    },
+    {
+        "title": "papel glase",
+        "price": 200,
+        "thumbnails": "test",
+        "id": 6
+    },
+    {
+        "title": "ejs",
+        "price": "15",
+        "thumbnails": "test ejs",
+        "id": 7
+    }
+]
