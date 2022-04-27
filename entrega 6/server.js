@@ -14,8 +14,6 @@ let moment = require('moment');
 
 app.use(express.static('./public'));
 
-// app.use(express.json());
-// app.use(express.urlencoded({extended:true}));
 app.set('views', path.join(__dirname, 'views'))
 app.set('view engine', 'ejs');
  
@@ -66,12 +64,7 @@ io.on('connection', async (socket) => {
         io.sockets.emit('chatMessages', {chats:allMessages});
     })
 })
-// //add product to products.json
-// app.post("/", async (req, res) => {
-//     let newProduct = await archivo.save(req.body);
-    
-//      res.redirect('/productos');
-// })
+
 
 
 
