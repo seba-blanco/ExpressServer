@@ -40,5 +40,11 @@
         "price": "3",
         "thumbnails": "123",
         "id": 8
+    },
+    {
+        "title": "seba",
+        "price": "4",
+        "thumbnails": "ewe",
+        "id": 9
     }
 ]

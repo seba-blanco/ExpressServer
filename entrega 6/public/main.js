@@ -1,6 +1,5 @@
 const socket = io.connect();
 
-
 function preventDef(){
     return false;
 }
@@ -30,25 +29,38 @@ function addProduct(e) {
     return false;
 }
 
-function addMessage(e) {
+function addChatMessage(e) {
    
-    const data = {
+    const chatMsg = {
         userName: document.getElementById('userName').value,
         message: document.getElementById('message').value
     };
-    
-    alert('pase el set');
-    socket.emit('newMessage',data);
+   
+    socket.emit('newMessage', chatMsg);
    
     return false;
 }
 
-
 socket.on('products', data => {
-    alert('la vuelta');
+   
     renderProductos(data);
-})
+});
 
-socket.on('chatMessages',data => {
+
+function renderChat(data) {
+    const html = data.map((elem, index) => {
+        return(`<div>
+            <strong>${elem.title}</strong>:
+            <em>${elem.price}</em>
+        </div>`)
+    }).join(" ");
+
+    document.getElementById('lstMsgs').innerHTML = html;
+    
+}
+
+
+socket.on('chatMessages', data => {
     alert('en el mensajes');
+    renderChat(data);
 })

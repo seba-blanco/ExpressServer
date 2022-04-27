@@ -40,10 +40,12 @@ app.get('/',async  (req,res) =>{
 
 })
 
+
+
 io.on('connection', async (socket) => {
     console.log('Cliente conectado');
     let allProds = await archivo.getAll();
-    io.sockets.emit('products', allProds);
+    socket.emit('products', allProds);
    
 
     socket.on('newProduct', async (data) => {
@@ -51,7 +53,7 @@ io.on('connection', async (socket) => {
         await archivo.save(data);
         let allProds = await archivo.getAll();
         io.sockets.emit('products', {productos:allProds});
-    })
+    });
 
     socket.on('newMessage', async (data) => {
         console.log("andetro del new message");
@@ -61,6 +63,7 @@ io.on('connection', async (socket) => {
         console.log("pase el save message");
         let allMessages = await chat.getMessages();
         console.log("pase el get messages");
+        
         io.sockets.emit('chatMessages', {chats:allMessages});
     })
 })
