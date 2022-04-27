@@ -1,13 +1,13 @@
-<form onsubmit="addProduct(e)">
+<form onsubmit="addProduct(this)">
 
     <label for="">
-       <input type="text" name="title"  placeholder="insert title">
+       <input type="text" id="title"  placeholder="insert title">
    </label>
     <label>
-       <input type="number" name="price"  placeholder="set price">
+       <input type="number" id="price"  placeholder="set price">
    </label>
    <label>
-       <input type="text" name="thumbnails"  placeholder="insert url">
+       <input type="text" id="thumbnails"  placeholder="insert url">
    </label>
     <input type="submit" value="Submit a product">
 </form>
