@@ -27,19 +27,27 @@ const server =app.listen(port, () => {
 server.on("error", error => console.log(`Error en servidor ${error}`));
 
 
-router.get('/',async  (req,res) =>{
+// router.get('/',async  (req,res) =>{
     
-    let prods =await archivo.getAll();
+//     let prods =await archivo.getAll();
     
-    res.json(prods);
+//     res.json(prods);
 
-})
+// })
 
 //get product by id.
-router.get('/:id',async (req,res) =>{
+router.get('/:id?',async (req,res) =>{
     
-    const id = req.params.id;
-    let prods = await archivo.getById(id);
+    let prods = null;
+
+    if (req.params.id) {
+        const id = req.params.id;
+        prods = await archivo.getById(id);
+    }
+    else {
+        prods = await archivo.getAll();
+    }
+   
     if (Object.entries(prods).length === 0) 
         res.json({errorMsg:'el objeto esta vacio'})
     else 

@@ -1,0 +1,56 @@
+[
+    {
+        "id": 1,
+        "title": "Escuadra",
+        "price": 123.45,
+        "thumbnails": "https://via.placeholder.com/15"
+    },
+    {
+        "id": 2,
+        "title": "calculadora",
+        "price": 234.56,
+        "thumbnails": "https://via.placeholder.com/15"
+    },
+    {
+        "id": 3,
+        "title": "Globo terraqueo",
+        "price": 345.67,
+        "thumbnails": "https://via.placeholder.com/15"
+    },
+    {
+        "title": "lapicera",
+        "price": 200,
+        "thumbnails": "https://via.placeholder.com/15",
+        "id": 4
+    },
+    {
+        "title": "boligoma",
+        "price": 200,
+        "thumbnails": "https://via.placeholder.com/15",
+        "id": 5
+    },
+    {
+        "title": "papel glase",
+        "price": 200,
+        "thumbnails": "https://via.placeholder.com/15",
+        "id": 6
+    },
+    {
+        "title": "estatua de Peron",
+        "price": 200,
+        "thumbnails": "https://via.placeholder.com/15",
+        "id": 7
+    },
+    {
+        "title": "product 5",
+        "price": "4",
+        "thumbnails": "dsfsdf",
+        "id": 8
+    },
+    {
+        "title": "test",
+        "price": "3",
+        "thumbnails": "test",
+        "id": 9
+    }
+]
