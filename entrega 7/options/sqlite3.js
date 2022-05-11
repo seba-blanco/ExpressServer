@@ -8,5 +8,4 @@ const knexSqLite = require('knex')({
     useNullAsDefault: true
 })
 
- console.log(dirPath.join(__dirname, '..', 'db', 'cursocoder.sqlite'));
 module.exports = { knexSqLite };
