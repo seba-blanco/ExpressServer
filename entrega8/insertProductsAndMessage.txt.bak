@@ -1,0 +1,201 @@
+//CREA E INSERTA PRODUCTOS EN LA COLECCION.
+db.products.insertMany([
+    {
+        "id": 1,
+        "title": "Escuadra",
+        "price": 123.45,
+        "thumbnails": "https://via.placeholder.com/15"
+    },
+    {
+        "id": 2,
+        "title": "calculadora",
+        "price": 534.56,
+        "thumbnails": "https://via.placeholder.com/15"
+    },
+    {
+        "id": 3,
+        "title": "Globo terraqueo",
+        "price": 345.67,
+        "thumbnails": "https://via.placeholder.com/15"
+    },
+    {
+        "title": "lapicera",
+        "price": 2000,
+        "thumbnails": "https://via.placeholder.com/15",
+        "id": 4
+    },
+    {
+        "title": "boligoma",
+        "price": 3500,
+        "thumbnails": "https://via.placeholder.com/15",
+        "id": 5
+    },
+    {
+        "title": "papel glase",
+        "price": 4000,
+        "thumbnails": "https://via.placeholder.com/15",
+        "id": 6
+    },
+    {
+        "title": "estatua de Peron",
+        "price": 4999,
+        "thumbnails": "https://via.placeholder.com/15",
+        "id": 7
+    },
+    {
+        "title": "product 5",
+        "price": "1200",
+        "thumbnails": "dsfsdf",
+        "id": 8
+    },
+    {
+        "title": "test",
+        "price": "200",
+        "thumbnails": "test",
+        "id": 9
+    }, {
+        "title": "test 2",
+        "price": "4500",
+        "thumbnails": "test",
+        "id": 10
+    }
+]);
+
+//CREA E INSERTA MENSAJES EN LA COLECCION.
+db.messages.insertMany([
+    {
+        "userName": "test",
+        "message": "3",
+        "datetime": "27/04/2022 18:20:05",
+        "id": 1
+    },
+    {
+        "userName": "user 2",
+        "message": "mensaje 2",
+        "datetime": "27/04/2022 18:40:39",
+        "id": 2
+    },
+    {
+        "userName": "user 3",
+        "message": "mensaje 3",
+        "datetime": "27/04/2022 18:44:07",
+        "id": 3
+    },
+    {
+        "userName": "user 4",
+        "message": "mensaje 4",
+        "datetime": "27/04/2022 18:45:11",
+        "id": 4
+    },
+    {
+        "userName": "user 5",
+        "message": "mensaje 5",
+        "datetime": "27/04/2022 18:45:18",
+        "id": 5
+    },
+    {
+        "userName": "user 6",
+        "message": "mensaje 6",
+        "datetime": "27/04/2022 18:47:28",
+        "id": 6
+    },
+    {
+        "userName": "user 7",
+        "message": "mensaje 7",
+        "datetime": "27/04/2022 18:47:35",
+        "id": 7
+    },
+    {
+        "userName": "user 8",
+        "message": "mensaje 8",
+        "datetime": "27/04/2022 18:49:27",
+        "id": 8
+    },
+    {
+        "userName": "user 9",
+        "message": "mensaje 9",
+        "datetime": "27/04/2022 18:49:33",
+        "id": 9
+    },
+    {
+        "userName": "user 10",
+        "message": "mensaje 10",
+        "datetime": "27/04/2022 18:52:01",
+        "id": 10
+    },
+    {
+        "userName": "user 11",
+        "message": "mensaje 11",
+        "datetime": "27/04/2022 18:52:13",
+        "id": 11
+    },
+    {
+        "userName": "user 12",
+        "message": "mensaje 12",
+        "datetime": "27/04/2022 18:52:30",
+        "id": 12
+    },
+    {
+        "userName": "user 13",
+        "message": "mensaje",
+        "datetime": "27/04/2022 18:52:37",
+        "id": 13
+    },
+    {
+        "userName": "user 14",
+        "message": "test 14",
+        "datetime": "27/04/2022 18:55:26",
+        "id": 14
+    },
+    {
+        "userName": "test 14",
+        "message": "restr",
+        "datetime": "27/04/2022 18:55:31",
+        "id": 15
+    }
+]);
+
+//LISTA TODOS LOS PRODUCTOS
+db.getCollection("products").find({});
+
+//LISTA TODOS LOS MENSAJES
+db.getCollection("messages").find({});
+
+//cuenta productos
+db.getCollection("products").count()
+
+
+//cuenta mensajes
+db.getCollection("messages").count();
+
+//agrego producto extra
+db.products.insertMany([
+    {
+        "id": 1,
+        "title": "producto extra",
+        "price": 123.45,
+        "thumbnails": "https://via.placeholder.com/15"
+    }]);
+	
+//productos menores a 1000
+db.getCollection("products").find( { price: { $lt: 1000} } )
+
+//productos entre 1000 y 3000
+db.products.find({ price : { $gte :  1000, $lte : 3000}});
+
+//mayores a 3000
+db.products.find( { price: { $gt: 3000} } )
+
+//nombre del tercer producto mas barato
+db.products.find({},{'title':1}).skip(2).limit(1).sort({price:+1})
+
+//actualizo el stock para todos a 100
+db.products.updateMany({},{$set:{'stock':100}})
+
+
+//pongo en stock 0 los mayores a 4000
+db.products.updateMany({ price: { $gte: 4000} },{$set:{'stock':0}})
+
+//borro menores = a 1000
+db.products.deleteMany({ price: { $lte: 1000} })
+
