@@ -1,6 +1,6 @@
 function ValidateLogin(req,res,next) {
     
-    if (req.session?.logged) {
+    if (req.isAuthenticated()) {
         next();
     }
     else {

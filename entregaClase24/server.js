@@ -1,92 +1,185 @@
 const express = require('express');
 const session = require('express-session');
 
-const util = require('util')
 
 const { Server: HttpServer } = require('http');
 const { Server:IOServer } = require('socket.io');
 const PORT = 8080;
 
-const {ProductsDAOFile} =  require('./src/DAOS/ProductsDAOFile');
-const {ChatDAOFile} =  require('./src/DAOS/ChatDAOFile');
-const {normalizeChat} = require('./src/utils/chatNormalizr')
-const {generateRandomProducts} = require('./src/mocks/productMocker');
+const logInRouter = require('./src/routes/logInRouter');
 
+const {validatePass} = require('./src/utils/passValidator');
+const {createHash} = require('./src/utils/hashGenerator')
+const { EXPIRATION_TIME } = require('./src/config/global')
+const {productsDAO, chatsDAO} = require("./src/DAOS/defaultDaos");
+const usersDB =  require('./src/models/Users');
+
+const {generateRandomProducts} = require('./src/mocks/productMocker');
 const ValidateLogin = require('./src/middlewares/securityMiddleware');
 
 const path = require('path')
-
 const app = express();
 const httpServer = new HttpServer(app);
 const io = new IOServer(httpServer);
 
 let moment = require('moment'); 
-const MongoStore = require('connect-mongo');
-const advancedOptions = {useNewUrlParser:true, useUnifiedTopology:true}
 
-app.use(express.static('./public'));
+const passport = require('passport');
+const LocalStrategy = require('passport-local').Strategy;
 
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
 
 app.use(session({
-    store: MongoStore.create({
-        mongoUrl:'mongodb+srv://UserAdmin:admin.blanco@fake-ecommerce.mrdeon7.mongodb.net/sessions?retryWrites=true&w=majority',
-        mongoOptions:advancedOptions
-    }),
-    resave:false,
-    saveUninitialized:false,
-    secret:'Peron',
+    secret: 'Peron',
     cookie: {
-        expires:60000
-    }
+        httpOnly: false,
+        secure: false,
+        maxAge: parseInt(EXPIRATION_TIME)
+    },
+    rolling: true,
+    resave: true,
+    saveUninitialized: true
 }))
+
+app.use(express.static('./public'));
+app.use(express.json());
+app.use(express.urlencoded({extended:true}));
+app.use(passport.initialize())
+app.use(passport.session())
+
+// app.use(session({
+//     store: MongoStore.create({
+//         mongoUrl:'mongodb+srv://UserAdmin:admin.blanco@fake-ecommerce.mrdeon7.mongodb.net/sessions?retryWrites=true&w=majority',
+//         mongoOptions:advancedOptions
+//     }),
+//     resave:false,
+//     saveUninitialized:false,
+//     secret:'Peron',
+//     cookie: {
+//         expires:60000
+//     }
+// }))
+
+
 
 app.set('views', path.join(__dirname, 'views'))
 app.set('view engine', 'ejs');
  
-const productsDAO = new ProductsDAOFile();
-const chatDAO = new ChatDAOFile();
 
 httpServer.listen(8080, () => {
     console.log('SERVER ON en http://localhost:8080');
 });
 
 
-app.get('/',ValidateLogin, async  (req,res) =>{
-    console.log(req.session.user);
-    res.render('pages/index', {UserLogged: req.session.user});  
+passport.use('login', new LocalStrategy(
+    (username, password, callback) => {
+        usersDB.findOne({ username: username }, (err, user) => {
+            if (err) {
+                return callback(err)
+            }
 
+            if (!user) {
+                console.log('No se encontro usuario');
+                return callback(null, false)
+            }
+
+            if(!validatePass(user, password)) {
+                console.log('Invalid Password');
+                return callback(null, false)
+            }
+
+            return callback(null, user)
+        })
+    }
+))
+
+
+
+passport.use('signup', new LocalStrategy(
+    {passReqToCallback: true}, (req, username, password, callback) => {
+        usersDB.findOne({ username: username }, (err, user) => {
+            if (err) {
+                console.log('Hay un error al registrarse');
+                return callback(err)
+            }
+
+            if (user) {
+                console.log('El usuario ya existe');
+                return callback(null, false)
+            }
+
+            console.log(req.body);
+
+            const newUser = {
+                firstName: req.body.firstname,
+                lastName: req.body.lastname,
+                email: req.body.email,
+                username: username,
+                password: createHash(password)
+            }
+
+            console.log(newUser);
+
+
+            usersDB.create(newUser, (err, userWithId) => {
+                if (err) {
+                    console.log('Hay un error al registrarse');
+                    return callback(err)
+                }
+
+                console.log(userWithId);
+                console.log('Registro de usuario satisfactoria');
+
+                return callback(null, userWithId)
+            })
+        })
+    }
+))
+
+passport.serializeUser((user, callback) => {
+    callback(null, user._id)
 })
+
+passport.deserializeUser((id, callback) => {
+    usersDB.findById(id, callback)
+})
+
+
+
+//  LOGIN
 app.get('/login', async (req, res) => {
     res.render('pages/login');
 
 })
+app.post('/login', passport.authenticate('login', { failureRedirect: '/faillogin' }), logInRouter.postLogin);
 
-app.post('/login', async (req, res) => {
-    req.session.user = req.body.username;
-    req.session.logged = true;
+app.get('/faillogin', (req, res) => {
 
-    res.redirect('/');
+    res.send('intento de inicio de sesion no valido')
+});
+
+//  SIGNUP
+app.get('/signup', logInRouter.getSignup);
+app.post('/signup', passport.authenticate('signup', { failureRedirect: '/failsignup' }), logInRouter.postSignup);
+app.get('/failsignup', (req, res) => {
+
+    res.send('no pudimos crear su usuario')
+});
+
+
+app.get('/', ValidateLogin, (req,res) =>{
+ 
+    res.render('pages/index', {UserLogged: req.user.firstName});  
+
 })
 
-app.get('/logout',ValidateLogin, (req, res) => {
-    req.session.destroy( error => {
-        if (error) {
-            res.send({status: 'Logout Error', body: error})
-        }
-    })
-
-    res.send('Usted ha cerrado sesion')
-})
-
+app.get('/logout',ValidateLogin, logInRouter.getLogout);
 
 
 io.on('connection', async (socket) => {
     console.log('Cliente conectado');
     let allProds = generateRandomProducts(5);
 
-    let allMessages = await chatDAO.getAll();
+    let allMessages = await chatsDAO.getAll();
     const dataContainer = {id:1, posts:[]};
     dataContainer.posts = allMessages;
 
@@ -104,10 +197,10 @@ io.on('connection', async (socket) => {
        
         data.message['datetime'] = moment(new Date()).format("DD/MM/YYYY HH:mm:ss");
         
-        await chatDAO.save(data);
+        await chatsDAO.save(data);
         
        
-        let allMessages = await chatDAO.getAll();
+        let allMessages = await chatsDAO.getAll();
         io.sockets.emit('chatMessages', {chat:allMessages});
     })
 })
