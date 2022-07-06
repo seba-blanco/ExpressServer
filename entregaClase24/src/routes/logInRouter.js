@@ -1,6 +1,7 @@
 // ------------------------------------------------------------------------------
 //  ROUTING
 // ------------------------------------------------------------------------------
+const parseArgs = require('minimist');
 
 function getRoot(req, res) {
     res.render('pages/login');
@@ -75,6 +76,24 @@ function checkAuthentication(req, res, next) {
     }
 }
 
+info = (req, res) => {
+    let args = parseArgs(process.argv);
+    
+    const info = {
+                    plataform: process.platform,
+                    nodeVersion: process.version,
+                    memoryUsage: `${process.memoryUsage()['rss'] /1000000} MB`,
+                    cwd: process.cwd(),
+                    pID: process.pid,
+                    folder:args._[1],
+                    args: process.argv.slice(2)
+
+    }
+   
+    res.render('pages/information', {info:info});
+    
+}
+
 module.exports = {
     getRoot,
     getLogin,
@@ -86,6 +105,7 @@ module.exports = {
     postSignup,
     getFailsignup,
     checkAuthentication,
-    getProfile
+    getProfile,
+    info
 }
   

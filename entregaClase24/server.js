@@ -1,5 +1,10 @@
 const express = require('express');
-const session = require('express-session');
+const session = require('express-session')
+
+const parseArgs = require('minimist');
+const options = {default:{PORT:'8080'}};
+
+const args = parseArgs(process.argv.slice(2), options);//parseArgs[, options];
 
 
 const { Server: HttpServer } = require('http');
@@ -46,27 +51,14 @@ app.use(express.urlencoded({extended:true}));
 app.use(passport.initialize())
 app.use(passport.session())
 
-// app.use(session({
-//     store: MongoStore.create({
-//         mongoUrl:'mongodb+srv://UserAdmin:admin.blanco@fake-ecommerce.mrdeon7.mongodb.net/sessions?retryWrites=true&w=majority',
-//         mongoOptions:advancedOptions
-//     }),
-//     resave:false,
-//     saveUninitialized:false,
-//     secret:'Peron',
-//     cookie: {
-//         expires:60000
-//     }
-// }))
-
-
 
 app.set('views', path.join(__dirname, 'views'))
 app.set('view engine', 'ejs');
  
 
-httpServer.listen(8080, () => {
-    console.log('SERVER ON en http://localhost:8080');
+httpServer.listen(args['PORT'], () => {
+    console.log('SERVER ON en http://localhost:' + args['PORT']);
+    
 });
 
 
@@ -165,6 +157,7 @@ app.get('/failsignup', (req, res) => {
     res.send('no pudimos crear su usuario')
 });
 
+app.get('/info', logInRouter.info);
 
 app.get('/', ValidateLogin, (req,res) =>{
  
