@@ -64,7 +64,7 @@ app.use(passport.session())
 app.set('views', path.join(__dirname, 'views'))
 app.set('view engine', 'ejs');
  
-const PORT = args['PORT'];
+const PORT = parseInt(process.argv[2]);
 const SERVER_MODE = args['SERVER_MODE'];
 console.log(`server mode: ${SERVER_MODE}`);
 console.log(`port: ${PORT}`);
