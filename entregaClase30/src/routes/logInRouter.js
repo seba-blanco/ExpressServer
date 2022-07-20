@@ -3,6 +3,58 @@
 // ------------------------------------------------------------------------------
 const parseArgs = require('minimist');
 const numCPUs = require("os").cpus().length;
+const log4js = require('log4js');
+
+
+infoCompression =  (req, res) => {
+    const logger = log4js.getLogger("warn");
+    logger.warn('prueba de un warn dentro de un warn ')
+    
+    logger.info("prueba log info");
+
+    logger.error("prueba log info dentro del warn");
+
+    let args = parseArgs(process.argv);
+    
+    const info = {
+                    plataform: process.platform,
+                    nodeVersion: process.version,
+                    memoryUsage: `${process.memoryUsage()['rss'] /1000000} MB`,
+                    cwd: process.cwd(),
+                    pID: process.pid,
+                    folder:args._[1],
+                    args: process.argv.slice(2),
+                    procesadores: `cantidad procesadores: ${numCPUs}`
+
+    }
+   
+    res.render('pages/information', {info:info});
+    
+}
+
+info = (req, res) => {
+    const logger = log4js.getLogger("error");
+    logger.warn('prueba de un warn dentro del error')
+    logger.info('prueba del info dentro del warn')
+    logger.error("prueba del error dentro del error");
+    
+    let args = parseArgs(process.argv);
+    
+    const info = {
+                    plataform: process.platform,
+                    nodeVersion: process.version,
+                    memoryUsage: `${process.memoryUsage()['rss'] /1000000} MB`,
+                    cwd: process.cwd(),
+                    pID: process.pid,
+                    folder:args._[1],
+                    args: process.argv.slice(2),
+                    procesadores: `cantidad procesadores: ${numCPUs}`
+
+    }
+   
+    res.render('pages/information', {info:info});
+    
+}
 
 function getRoot(req, res) {
     res.render('pages/login');
@@ -77,24 +129,7 @@ function checkAuthentication(req, res, next) {
     }
 }
 
-info = (req, res) => {
-    let args = parseArgs(process.argv);
-    
-    const info = {
-                    plataform: process.platform,
-                    nodeVersion: process.version,
-                    memoryUsage: `${process.memoryUsage()['rss'] /1000000} MB`,
-                    cwd: process.cwd(),
-                    pID: process.pid,
-                    folder:args._[1],
-                    args: process.argv.slice(2),
-                    procesadores: `cantidad procesadores: ${numCPUs}`
 
-    }
-   
-    res.render('pages/information', {info:info});
-    
-}
 
 module.exports = {
     getRoot,
@@ -108,6 +143,7 @@ module.exports = {
     getFailsignup,
     checkAuthentication,
     getProfile,
-    info
+    info,
+    infoCompression
 }
   

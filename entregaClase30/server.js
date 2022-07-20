@@ -2,9 +2,11 @@ const express = require('express');
 const session = require('express-session')
 const cluster = require('cluster');
 const numCPUs = require('os').cpus().length;
+const compression = require('compression');
+const log4js = require("log4js");
 
 const parseArgs = require('minimist');
-const options = {default:{SERVER_MODE:'FORK'}};
+const options = {default:{PORT:8080, SERVER_MODE:'FORK'}};
 
 
 console.log(`parameters: ${JSON.stringify(process.argv)}`);
@@ -51,6 +53,21 @@ app.use(session({
     resave: true,
     saveUninitialized: true
 }))
+
+//seteo el logger.
+log4js.configure({
+    appenders: {
+      miLoggerConsole2: { type: "console" },
+      errorConsole: { type: "console" },
+      warnFile: {type:'file', filename: 'warn.log'},
+      errorFile: {type:'file', filename: 'error.log'},
+    },
+    categories: {
+      default: { appenders: ['miLoggerConsole2'], level: "info" },
+      warn: { appenders: ['miLoggerConsole2','warnFile'], level: "warn" },
+      error: { appenders: ['errorConsole','errorFile'], level: "error" },
+    },
+  });
 
 
 app.use("/api/", randomRouter);
@@ -187,6 +204,8 @@ app.get('/failsignup', (req, res) => {
 });
 
 app.get('/info', logInRouter.info);
+
+app.get('/infoCompression',  logInRouter.infoCompression);
 
 app.get('/', ValidateLogin, (req,res) =>{
  

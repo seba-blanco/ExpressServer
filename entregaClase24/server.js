@@ -1,8 +1,10 @@
 const express = require('express');
 const session = require('express-session')
+const cluster = require('cluster');
+const numCPUs = require('os').cpus().length;
 
 const parseArgs = require('minimist');
-const options = {default:{PORT:'8080'}};
+const options = {default:{PORT:'8080', SERVER_MODE:'FORK'}};
 
 const args = parseArgs(process.argv.slice(2), options);//parseArgs[, options];
 
@@ -30,8 +32,8 @@ const io = new IOServer(httpServer);
 let moment = require('moment'); 
 
 const passport = require('passport');
+const { Console } = require('console');
 const LocalStrategy = require('passport-local').Strategy;
-
 
 app.use(session({
     secret: 'Peron',
@@ -55,11 +57,29 @@ app.use(passport.session())
 app.set('views', path.join(__dirname, 'views'))
 app.set('view engine', 'ejs');
  
+const SERVER_MODE = args['SERVER_MODE'];
+Console.log(`server mode: ${SERVER_MODE}`);
 
-httpServer.listen(args['PORT'], () => {
-    console.log('SERVER ON en http://localhost:' + args['PORT']);
+if (SERVER_MODE =='FORK') {
+    httpServer.listen(args['PORT'], () => {
+        console.log('SERVER ON en http://localhost:' + args['PORT']);
     
-});
+    });
+    httpServer.on("Error", (error) => console.log(`error en servidor ${error}`));
+}
+else {
+    console.log("entering cluster_mode");
+    if (cluster.isMaster) {
+        
+        for (let i=0; i<numCPUs; i++){
+            cluster.fork();
+        }
+
+        cluster.on('exit', (worker, code, signal) => {
+            console.log(`worker ${worker.process.pid} died`);
+        });
+    }
+}
 
 
 passport.use('login', new LocalStrategy(

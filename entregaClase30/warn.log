@@ -1,0 +1,4 @@
+[2022-07-20T17:52:26.539] [WARN] warn - prueba de un warn dentro de un warn 
+[2022-07-20T17:52:26.540] [ERROR] warn - prueba log info dentro del warn
+[2022-07-20T17:52:42.546] [WARN] warn - prueba de un warn dentro de un warn 
+[2022-07-20T17:52:42.546] [ERROR] warn - prueba log info dentro del warn
