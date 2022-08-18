@@ -2,6 +2,8 @@ const express = require('express');
 
 const {Router} = express;
 
+const {getAllProd, addProd} = require('../controllers/productController')
+
 const {productsDAO} = require("../DAOS/defaultDaos");
 // const archivo = new ProductsDAOFirestore();
 
@@ -37,31 +39,32 @@ productsRouter.get('/add/', async (req,res) => {
 })
 
 //get product by id.
-productsRouter.get('/:id?', async (req,res) =>{
+// productsRouter.get('/:id?', async (req,res) =>{
     
-    let prods = null;
+//     let prods = null;
     
-    if (req.params.id) {
-        const id = req.params.id;
-        prods = await productsDAO.getById(id);
-    }
-    else {
-        prods = await productsDAO.getAll();
-    }
+//     if (req.params.id) {
+//         const id = req.params.id;
+//         prods = await productsDAO.getById(id);
+//     }
+//     else {
+//         prods = await productsDAO.getAll();
+//     }
    
-    if (Object.entries(prods).length === 0) 
-        res.json({errorMsg:'el objeto esta vacio'})
-    else 
-        res.json(prods);
-})
+//     if (Object.entries(prods).length === 0) 
+//         res.json({errorMsg:'el objeto esta vacio'})
+//     else 
+//         res.json(prods);
+// })
 
-
+productsRouter.post("/", addProd);
+productsRouter.get('/', getAllProd);
 //add product to products.json
-productsRouter.post("/", SecurityMiddleware, async (req, res) => {
+// productsRouter.post("/", SecurityMiddleware, async (req, res) => {
     
-    let newProduct = await productsDAO.saveProduct(req.body);
-    res.json({newProduct: newProduct});
-})
+//     let newProduct = await productsDAO.saveProduct(req.body);
+//     res.json({newProduct: newProduct});
+// })
 
 
 //modify by ID
