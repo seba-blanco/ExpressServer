@@ -3,14 +3,16 @@
   "version": "1.0.0",
   "main": "server.js",
   "scripts": {
-    "test": "node benchmark.js",
+    "test": "mocha src/server.test.js",
     "start": "node server.js"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
     "autocannon": "^7.9.0",
+    "axios": "^0.27.2",
     "bcrypt": "^5.0.1",
+    "chai": "^4.3.6",
     "compression": "^1.7.4",
     "connect-mongo": "^4.6.0",
     "dotenv": "^16.0.1",
@@ -20,13 +22,15 @@
     "faker": "^5.5.3",
     "log4js": "^6.6.0",
     "minimist": "^1.2.6",
+    "mocha": "^10.0.0",
     "moment": "^2.29.3",
     "mongoose": "^6.4.1",
     "normalizr": "^3.6.2",
     "passport": "^0.6.0",
     "passport-local": "^1.0.0",
     "pug": "^3.0.2",
-    "socket.io": "^4.5.0"
+    "socket.io": "^4.5.0",
+    "supertest": "^6.2.4"
   },
   "description": ""
 }
